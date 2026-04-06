@@ -1,0 +1,47 @@
+﻿{
+  "schemaVersion": 2,
+  "galleryTitle": "Koleksi Video TikTok Favorit",
+  "galleryDescription": "Klik cover koleksi untuk membuka kumpulan video.",
+  "collections": [
+    {
+      "id": "coffee",
+      "title": "Koleksi Kopi",
+      "description": "Tips dan resep minuman kopi.",
+      "cover": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80",
+      "videos": [
+        {
+          "id": "vid1",
+          "title": "Tips Membuat Kopi Enak",
+          "tiktokUrl": "https://www.tiktok.com/@coffeelover/video/1234567890123456789",
+          "thumbnail": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+          "description": "Cara sederhana menyeduh kopi ala barista.",
+          "tags": ["kopi", "minuman", "tutorial"]
+        },
+        {
+          "id": "vid3",
+          "title": "Latte Art Dasar",
+          "tiktokUrl": "https://www.tiktok.com/@coffeelover/video/1234567890123456790",
+          "thumbnail": "",
+          "description": "Belajar pola hati untuk latte art pemula.",
+          "tags": ["kopi", "latte", "barista"]
+        }
+      ]
+    },
+    {
+      "id": "dance",
+      "title": "Koleksi Tari",
+      "description": "Gerakan tari kreatif dan budaya Nusantara.",
+      "cover": "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=1200&q=80",
+      "videos": [
+        {
+          "id": "vid2",
+          "title": "Tari Kreasi Nusantara",
+          "tiktokUrl": "https://www.tiktok.com/@dancer/video/9876543210987654321",
+          "thumbnail": "",
+          "description": "Gerakan tari modern dengan sentuhan tradisional.",
+          "tags": ["tari", "budaya", "seni"]
+        }
+      ]
+    }
+  ]
+}

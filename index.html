@@ -1,0 +1,96 @@
+﻿<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Galeri Video TikTok</title>
+    <meta
+      name="description"
+      content="Galeri video TikTok responsif berbasis JSON dan TikTok oEmbed API."
+    />
+    <link rel="preconnect" href="https://www.tiktok.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero__content">
+        <p class="hero__eyebrow">TikTok oEmbed Gallery</p>
+        <h1 id="galleryTitle">Memuat koleksi...</h1>
+        <p id="galleryDescription">
+          Pilih cover koleksi untuk melihat kumpulan video TikTok.
+        </p>
+      </div>
+    </header>
+
+    <main class="container" id="app" aria-live="polite">
+      <section class="topbar">
+        <p id="breadcrumb" class="breadcrumb">Beranda / Koleksi</p>
+        <section id="status" class="status" role="status">Memuat data video...</section>
+      </section>
+
+      <section id="collectionsSection">
+        <h2 class="section-title">Koleksi</h2>
+        <section id="collectionGrid" class="collection-grid" aria-label="Daftar koleksi"></section>
+      </section>
+
+      <section id="videosSection" hidden>
+        <div class="videos-header">
+          <button id="btnBack" class="btn btn--ghost" type="button">Kembali ke Koleksi</button>
+          <div>
+            <h2 id="collectionTitle" class="section-title"></h2>
+            <p id="collectionMeta" class="collection-meta"></p>
+          </div>
+        </div>
+        <section id="videoGrid" class="video-grid" aria-label="Daftar video"></section>
+      </section>
+    </main>
+
+    <template id="collectionCardTemplate">
+      <article class="card card--collection">
+        <button class="collection-cover" type="button">
+          <img class="collection-cover__img" alt="" loading="lazy" />
+          <span class="collection-cover__placeholder">Tanpa cover</span>
+          <span class="collection-cover__overlay">Lihat Video</span>
+        </button>
+        <div class="card__body">
+          <h3 class="card__title"></h3>
+          <p class="card__desc"></p>
+          <p class="card__meta"></p>
+        </div>
+      </article>
+    </template>
+
+    <template id="videoCardTemplate">
+      <article class="card">
+        <div class="card__thumb-wrap">
+          <img class="card__thumb" alt="" loading="lazy" />
+          <span class="card__thumb-placeholder">Tanpa thumbnail</span>
+        </div>
+
+        <div class="card__body">
+          <h3 class="card__title"></h3>
+          <p class="card__desc"></p>
+          <ul class="tag-list" aria-label="Tag video"></ul>
+
+          <div class="card__actions">
+            <button class="btn btn--primary" type="button">Tonton di halaman ini</button>
+            <a class="btn btn--ghost" target="_blank" rel="noopener noreferrer">Buka di TikTok</a>
+          </div>
+
+          <div class="embed-area" hidden>
+            <p class="embed-status">Memuat embed...</p>
+            <div class="embed-slot"></div>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <script src="app.js" type="module"></script>
+  </body>
+</html>
