@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
@@ -18,97 +18,7 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <header class="hero">
-      <div class="hero__content">
-        <p class="hero__eyebrow">TikTok Embed Gallery</p>
-        <h1 id="galleryTitle">Memuat koleksi...</h1>
-        <p id="galleryDescription">
-          Pilih cover koleksi untuk melihat kumpulan video TikTok.
-        </p>
-      </div>
-    </header>
-
-    <main class="container" id="app" aria-live="polite">
-      <section class="topbar">
-        <p id="breadcrumb" class="breadcrumb">Beranda / Koleksi</p>
-        <section id="status" class="status" role="status">Memuat data video...</section>
-      </section>
-
-      <section id="collectionsSection">
-        <h2 class="section-title">Koleksi</h2>
-        <section id="collectionGrid" class="collection-grid" aria-label="Daftar koleksi"></section>
-      </section>
-
-      <section id="videosSection" hidden>
-        <div class="videos-header">
-          <button id="btnBack" class="btn btn--ghost" type="button">Kembali ke Koleksi</button>
-          <div>
-            <h2 id="collectionTitle" class="section-title"></h2>
-            <p id="collectionMeta" class="collection-meta"></p>
-          </div>
-        </div>
-        <section id="videoGrid" class="video-grid" aria-label="Daftar video"></section>
-      </section>
-    </main>
-
-    <template id="collectionCardTemplate">
-      <article class="card card--collection">
-        <button class="collection-cover" type="button">
-          <img class="collection-cover__img" alt="" loading="lazy" />
-          <span class="collection-cover__placeholder">Tanpa cover</span>
-          <span class="collection-cover__overlay">Lihat Video</span>
-        </button>
-        <div class="card__body">
-          <h3 class="card__title"></h3>
-          <p class="card__desc"></p>
-          <p class="card__meta"></p>
-        </div>
-      </article>
-    </template>
-
-    <template id="videoCardTemplate">
-      <article class="card">
-        <div class="card__thumb-wrap">
-          <img class="card__thumb" alt="" loading="lazy" />
-          <span class="card__thumb-placeholder">Tanpa thumbnail</span>
-        </div>
-
-        <div class="card__body">
-          <h3 class="card__title"></h3>
-          <p class="card__desc"></p>
-          <ul class="tag-list" aria-label="Tag video"></ul>
-
-          <div class="card__actions">
-            <button class="btn btn--primary" type="button">Tonton di sini</button>
-            <a class="btn btn--ghost" target="_blank" rel="noopener noreferrer">Buka di TikTok</a>
-          </div>
-        </div>
-      </article>
-    </template>
-
+    <div id="root"></div>
     <script src="app.js" type="module"></script>
-
-    <section id="watchModal" class="watch-modal" hidden>
-      <div id="watchBackdrop" class="watch-modal__backdrop"></div>
-      <div class="watch-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="watchTitle">
-        <div class="watch-modal__header">
-          <div>
-            <p class="watch-modal__eyebrow">Sedang Ditonton</p>
-            <h3 id="watchTitle" class="watch-modal__title"></h3>
-            <p id="watchHint" class="watch-modal__hint"></p>
-          </div>
-          <button id="btnCloseModal" class="btn btn--ghost watch-modal__close" type="button" aria-label="Tutup modal">
-            Tutup ✕
-          </button>
-        </div>
-        <p class="watch-modal__shortcut">Shortcut: `Esc` untuk tutup, `←` dan `→` untuk pindah video.</p>
-        <div id="watchEmbedStatus" class="watch-modal__status">Memuat video...</div>
-        <div id="watchEmbedSlot" class="watch-modal__embed"></div>
-        <div class="watch-modal__footer">
-          <button id="btnPrevVideo" class="btn btn--ghost" type="button">← Sebelumnya</button>
-          <button id="btnNextVideo" class="btn btn--ghost" type="button">Selanjutnya →</button>
-        </div>
-      </div>
-    </section>
   </body>
 </html>
