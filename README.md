@@ -1,12 +1,12 @@
-﻿# TikTok oEmbed Gallery (GitHub Pages)
+﻿# TikTok Embed Gallery (GitHub Pages)
 
-Aplikasi statis untuk menampilkan koleksi cover, lalu daftar video TikTok per koleksi. Embed video dilakukan per item menggunakan TikTok oEmbed API.
+Aplikasi statis untuk menampilkan koleksi cover, lalu daftar video TikTok per koleksi. Embed video dilakukan per item menggunakan TikTok embed player langsung.
 
 ## Struktur
 
 - `index.html` : layout utama
 - `styles.css` : styling responsif
-- `app.js` : load JSON, render cover koleksi, render video, fetch TikTok oEmbed
+- `app.js` : load JSON, render cover koleksi, render video, dan render TikTok embed player langsung
 - `data/videos.json` : sumber data galeri
 
 ## Format JSON (disarankan)
@@ -60,4 +60,4 @@ npx serve .
 ## Catatan
 
 - URL TikTok pada contoh adalah dummy; ganti dengan URL video yang valid.
-- Jika oEmbed gagal (video privat/URL invalid), tombol "Buka di TikTok" tetap bisa dipakai.
+- Jika embed gagal (video privat/URL invalid), tombol "Buka di TikTok" tetap bisa dipakai.

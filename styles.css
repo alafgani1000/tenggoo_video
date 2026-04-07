@@ -29,6 +29,10 @@ body {
   min-height: 100vh;
 }
 
+body.modal-open {
+  overflow: hidden;
+}
+
 .hero {
   padding: 52px 20px 24px;
 }
@@ -126,6 +130,11 @@ body {
   box-shadow: var(--shadow);
   display: grid;
   transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+}
+
+.card--active {
+  border-color: #0f766e;
+  box-shadow: 0 0 0 2px rgba(15, 118, 110, 0.18), 0 16px 30px rgba(17, 24, 39, 0.16);
 }
 
 .card:hover {
@@ -291,6 +300,118 @@ body {
   font-size: 0.9rem;
 }
 
+.watch-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 14px;
+}
+
+.watch-modal[hidden] {
+  display: none;
+}
+
+.watch-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.72);
+  backdrop-filter: blur(2px);
+}
+
+.watch-modal__dialog {
+  position: relative;
+  z-index: 1;
+  width: min(980px, 100%);
+  max-height: calc(100dvh - 28px);
+  overflow: hidden;
+  background: #fffdf9;
+  border: 1px solid #e9ddc7;
+  border-radius: 18px;
+  display: grid;
+  grid-template-rows: auto auto auto 1fr auto;
+  padding: 0;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+}
+
+.watch-modal__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 14px 8px;
+  border-bottom: 1px solid #efe4d2;
+  background: linear-gradient(180deg, #fffcf6, #fffaf0);
+}
+
+.watch-modal__eyebrow {
+  margin: 0 0 4px;
+  color: #9a3412;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+
+.watch-modal__title {
+  margin: 0;
+  font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.3;
+}
+
+.watch-modal__hint {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.watch-modal__close {
+  white-space: nowrap;
+}
+
+.watch-modal__shortcut {
+  margin: 0;
+  padding: 10px 14px 0;
+  color: #6b7280;
+  font-size: 0.78rem;
+}
+
+.watch-modal__status {
+  margin: 0;
+  padding: 8px 14px;
+  color: #9a3412;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.watch-modal__embed {
+  padding: 0 14px 14px;
+  overflow: auto;
+  min-height: 420px;
+  background: linear-gradient(180deg, #fffefb 0%, #fff7eb 100%);
+}
+
+.tiktok-iframe {
+  width: min(605px, 100%);
+  height: 740px;
+  border: 0;
+  border-radius: 12px;
+  margin: 0 auto;
+  display: block;
+}
+
+.watch-modal__footer {
+  margin-top: 0;
+  padding: 10px 14px 14px;
+  border-top: 1px solid #efe4d2;
+  background: #fffdf7;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
 .btn {
   border: 0;
   cursor: pointer;
@@ -309,6 +430,12 @@ body {
   transform: translateY(-1px);
 }
 
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .btn--primary {
   background: linear-gradient(135deg, var(--brand), var(--brand-strong));
   color: #fff;
@@ -322,21 +449,6 @@ body {
   background: #fff;
   color: var(--text);
   border: 1px solid var(--line);
-}
-
-.embed-area {
-  border-top: 1px dashed #dcc8ac;
-  padding-top: 10px;
-}
-
-.embed-status {
-  margin: 0 0 8px;
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
-.embed-slot {
-  overflow: auto;
 }
 
 @media (max-width: 760px) {
@@ -382,6 +494,52 @@ body {
 
   .collection-meta {
     font-size: 0.82rem;
+  }
+
+  .watch-modal {
+    padding: 0;
+  }
+
+  .watch-modal__dialog {
+    width: 100%;
+    max-height: 100dvh;
+    border-radius: 0;
+    border: 0;
+  }
+
+  .watch-modal__title {
+    font-size: 1.02rem;
+  }
+
+  .watch-modal__hint {
+    font-size: 0.82rem;
+  }
+
+  .watch-modal__shortcut {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .watch-modal__status {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .watch-modal__embed {
+    padding: 0 12px 10px;
+    min-height: 360px;
+  }
+
+  .tiktok-iframe {
+    height: 78dvh;
+    min-height: 520px;
+  }
+
+  .watch-modal__footer {
+    width: 100%;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 
   .card {

@@ -1,6 +1,4 @@
 ﻿const DATA_PATH = "./data/videos.json";
-const OEMBED_ENDPOINT = "https://www.tiktok.com/oembed";
-
 const titleEl = document.getElementById("galleryTitle");
 const galleryDescriptionEl = document.getElementById("galleryDescription");
 const breadcrumbEl = document.getElementById("breadcrumb");
@@ -13,11 +11,23 @@ const collectionTitleEl = document.getElementById("collectionTitle");
 const collectionMetaEl = document.getElementById("collectionMeta");
 const btnBackEl = document.getElementById("btnBack");
 const videoGridEl = document.getElementById("videoGrid");
+const watchModalEl = document.getElementById("watchModal");
+const watchBackdropEl = document.getElementById("watchBackdrop");
+const watchTitleEl = document.getElementById("watchTitle");
+const watchHintEl = document.getElementById("watchHint");
+const watchEmbedStatusEl = document.getElementById("watchEmbedStatus");
+const watchEmbedSlotEl = document.getElementById("watchEmbedSlot");
+const btnPrevVideoEl = document.getElementById("btnPrevVideo");
+const btnNextVideoEl = document.getElementById("btnNextVideo");
+const btnCloseModalEl = document.getElementById("btnCloseModal");
 
 const collectionTemplateEl = document.getElementById("collectionCardTemplate");
 const videoTemplateEl = document.getElementById("videoCardTemplate");
 
 let collectionsState = [];
+let currentVideosState = [];
+let currentWatchIndex = -1;
+let lastTriggerButton = null;
 
 btnBackEl.addEventListener("click", () => {
   videosSectionEl.hidden = true;
@@ -25,8 +35,49 @@ btnBackEl.addEventListener("click", () => {
   collectionTitleEl.textContent = "";
   collectionMetaEl.textContent = "";
   videoGridEl.innerHTML = "";
+  closeWatchModal();
+  currentVideosState = [];
+  currentWatchIndex = -1;
   breadcrumbEl.textContent = "Beranda / Koleksi";
   statusEl.textContent = "Pilih cover koleksi untuk melihat video.";
+});
+
+btnPrevVideoEl.addEventListener("click", () => {
+  if (currentWatchIndex <= 0) return;
+  void openWatchByIndex(currentWatchIndex - 1);
+});
+
+btnNextVideoEl.addEventListener("click", () => {
+  if (currentWatchIndex >= currentVideosState.length - 1) return;
+  void openWatchByIndex(currentWatchIndex + 1);
+});
+
+btnCloseModalEl.addEventListener("click", () => {
+  closeWatchModal();
+});
+
+watchBackdropEl.addEventListener("click", () => {
+  closeWatchModal();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (watchModalEl.hidden) return;
+
+  if (event.key === "Escape") {
+    closeWatchModal();
+    return;
+  }
+
+  if (event.key === "ArrowLeft" && currentWatchIndex > 0) {
+    event.preventDefault();
+    void openWatchByIndex(currentWatchIndex - 1);
+    return;
+  }
+
+  if (event.key === "ArrowRight" && currentWatchIndex < currentVideosState.length - 1) {
+    event.preventDefault();
+    void openWatchByIndex(currentWatchIndex + 1);
+  }
 });
 
 void init();
@@ -163,7 +214,10 @@ function openCollection(collectionId) {
   collectionTitleEl.textContent = selected.title;
   collectionMetaEl.textContent = `${selected.videos.length} video dalam koleksi ini`;
   breadcrumbEl.textContent = `Beranda / Koleksi / ${selected.title}`;
+  closeWatchModal();
+  currentWatchIndex = -1;
   renderVideos(selected.videos);
+  currentVideosState = selected.videos;
 
   statusEl.textContent = `${selected.videos.length} video ditampilkan`;
   videosSectionEl.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -172,7 +226,7 @@ function openCollection(collectionId) {
 function renderVideos(videos) {
   const fragment = document.createDocumentFragment();
 
-  videos.forEach((video) => {
+  videos.forEach((video, index) => {
     const card = videoTemplateEl.content.firstElementChild.cloneNode(true);
 
     const thumb = card.querySelector(".card__thumb");
@@ -182,13 +236,11 @@ function renderVideos(videos) {
     const tags = card.querySelector(".tag-list");
     const btnEmbed = card.querySelector(".btn--primary");
     const btnOpen = card.querySelector(".btn--ghost");
-    const embedArea = card.querySelector(".embed-area");
-    const embedStatus = card.querySelector(".embed-status");
-    const embedSlot = card.querySelector(".embed-slot");
 
     title.textContent = video.title || "Tanpa Judul";
     desc.textContent = video.description || "Tanpa deskripsi.";
     btnOpen.href = video.tiktokUrl;
+    card.setAttribute("data-video-index", String(index));
 
     const thumbnail = typeof video.thumbnail === "string" ? video.thumbnail.trim() : "";
     if (thumbnail) {
@@ -209,31 +261,9 @@ function renderVideos(videos) {
     });
 
     btnEmbed.addEventListener("click", async () => {
-      if (!embedArea.hidden) {
-        embedArea.hidden = true;
-        btnEmbed.textContent = "Tonton di halaman ini";
-        return;
-      }
-
-      embedArea.hidden = false;
-      btnEmbed.textContent = "Sembunyikan embed";
-
-      if (embedSlot.innerHTML.trim()) {
-        return;
-      }
-
-      embedStatus.textContent = "Memuat embed dari TikTok oEmbed API...";
-
-      try {
-        const html = await fetchOEmbedHtml(video.tiktokUrl);
-        embedSlot.innerHTML = html;
-        loadTikTokEmbedScript();
-        embedStatus.textContent = "Embed berhasil dimuat.";
-      } catch (error) {
-        console.error(error);
-        embedStatus.textContent =
-          "Gagal memuat embed. Gunakan tombol 'Buka di TikTok'.";
-      }
+      currentVideosState = videos;
+      lastTriggerButton = btnEmbed;
+      await openWatchByIndex(index);
     });
 
     fragment.appendChild(card);
@@ -243,34 +273,79 @@ function renderVideos(videos) {
   videoGridEl.appendChild(fragment);
 }
 
-async function fetchOEmbedHtml(url) {
-  const requestUrl = `${OEMBED_ENDPOINT}?url=${encodeURIComponent(url)}`;
-  const response = await fetch(requestUrl);
+async function openWatchByIndex(index) {
+  const video = currentVideosState[index];
+  if (!video) return;
 
-  if (!response.ok) {
-    throw new Error(`oEmbed error (${response.status})`);
+  currentWatchIndex = index;
+  watchModalEl.hidden = false;
+  document.body.classList.add("modal-open");
+  watchTitleEl.textContent = video.title || "Tanpa Judul";
+  watchHintEl.textContent = `Video ${index + 1} dari ${currentVideosState.length}`;
+  watchEmbedStatusEl.textContent = "Memuat player TikTok...";
+  watchEmbedSlotEl.innerHTML = "";
+  statusEl.textContent = `Sedang menonton: ${watchTitleEl.textContent}`;
+
+  updateWatchNavButtons();
+  updateActiveVideoCard(index);
+  btnCloseModalEl.focus({ preventScroll: true });
+
+  try {
+    watchEmbedSlotEl.innerHTML = buildTikTokEmbedHtml(video.tiktokUrl);
+    watchEmbedStatusEl.textContent = "Video siap ditonton.";
+  } catch (error) {
+    console.error(error);
+    watchEmbedStatusEl.textContent = `Gagal memuat embed: ${error.message}`;
   }
-
-  const data = await response.json();
-  if (!data || typeof data.html !== "string" || !data.html.trim()) {
-    throw new Error("Respons oEmbed tidak berisi HTML embed.");
-  }
-
-  return data.html;
 }
 
-function loadTikTokEmbedScript() {
-  const existing = document.querySelector('script[data-tiktok-embed="true"]');
-  if (existing) {
-    if (window.tiktokEmbedLoad) {
-      window.tiktokEmbedLoad();
-    }
-    return;
+function closeWatchModal() {
+  watchModalEl.hidden = true;
+  watchEmbedSlotEl.innerHTML = "";
+  watchEmbedStatusEl.textContent = "Memuat video...";
+  document.body.classList.remove("modal-open");
+  if (lastTriggerButton && typeof lastTriggerButton.focus === "function") {
+    lastTriggerButton.focus({ preventScroll: true });
+  }
+}
+
+function updateWatchNavButtons() {
+  btnPrevVideoEl.disabled = currentWatchIndex <= 0;
+  btnNextVideoEl.disabled = currentWatchIndex >= currentVideosState.length - 1;
+}
+
+function updateActiveVideoCard(activeIndex) {
+  const cards = videoGridEl.querySelectorAll(".card");
+  cards.forEach((card) => {
+    const cardIndex = Number(card.getAttribute("data-video-index"));
+    const isActive = cardIndex === activeIndex;
+    card.classList.toggle("card--active", isActive);
+  });
+}
+
+function buildTikTokEmbedHtml(url) {
+  if (typeof url !== "string" || !url.trim()) {
+    throw new Error("URL TikTok tidak valid.");
   }
 
-  const script = document.createElement("script");
-  script.src = "https://www.tiktok.com/embed.js";
-  script.async = true;
-  script.setAttribute("data-tiktok-embed", "true");
-  document.body.appendChild(script);
+  const safeUrl = url.trim();
+  const videoId = extractTikTokVideoId(safeUrl);
+  if (!videoId) {
+    throw new Error("Format URL TikTok tidak valid. Gunakan URL .../video/{id}.");
+  }
+
+  return `<iframe
+    src="https://www.tiktok.com/embed/v2/${videoId}?lang=en-US"
+    title="TikTok Video ${videoId}"
+    class="tiktok-iframe"
+    loading="lazy"
+    allowfullscreen
+    referrerpolicy="strict-origin-when-cross-origin"
+  ></iframe>`;
+}
+
+function extractTikTokVideoId(url) {
+  const match = url.match(/\/video\/(\d+)/i);
+  if (!match) return "";
+  return match[1];
 }

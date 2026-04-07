@@ -6,7 +6,7 @@
     <title>Galeri Video TikTok</title>
     <meta
       name="description"
-      content="Galeri video TikTok responsif berbasis JSON dan TikTok oEmbed API."
+      content="Galeri video TikTok responsif berbasis JSON dengan embed player langsung."
     />
     <link rel="preconnect" href="https://www.tiktok.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -20,7 +20,7 @@
   <body>
     <header class="hero">
       <div class="hero__content">
-        <p class="hero__eyebrow">TikTok oEmbed Gallery</p>
+        <p class="hero__eyebrow">TikTok Embed Gallery</p>
         <h1 id="galleryTitle">Memuat koleksi...</h1>
         <p id="galleryDescription">
           Pilih cover koleksi untuk melihat kumpulan video TikTok.
@@ -79,18 +79,36 @@
           <ul class="tag-list" aria-label="Tag video"></ul>
 
           <div class="card__actions">
-            <button class="btn btn--primary" type="button">Tonton di halaman ini</button>
+            <button class="btn btn--primary" type="button">Tonton di sini</button>
             <a class="btn btn--ghost" target="_blank" rel="noopener noreferrer">Buka di TikTok</a>
-          </div>
-
-          <div class="embed-area" hidden>
-            <p class="embed-status">Memuat embed...</p>
-            <div class="embed-slot"></div>
           </div>
         </div>
       </article>
     </template>
 
     <script src="app.js" type="module"></script>
+
+    <section id="watchModal" class="watch-modal" hidden>
+      <div id="watchBackdrop" class="watch-modal__backdrop"></div>
+      <div class="watch-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="watchTitle">
+        <div class="watch-modal__header">
+          <div>
+            <p class="watch-modal__eyebrow">Sedang Ditonton</p>
+            <h3 id="watchTitle" class="watch-modal__title"></h3>
+            <p id="watchHint" class="watch-modal__hint"></p>
+          </div>
+          <button id="btnCloseModal" class="btn btn--ghost watch-modal__close" type="button" aria-label="Tutup modal">
+            Tutup ✕
+          </button>
+        </div>
+        <p class="watch-modal__shortcut">Shortcut: `Esc` untuk tutup, `←` dan `→` untuk pindah video.</p>
+        <div id="watchEmbedStatus" class="watch-modal__status">Memuat video...</div>
+        <div id="watchEmbedSlot" class="watch-modal__embed"></div>
+        <div class="watch-modal__footer">
+          <button id="btnPrevVideo" class="btn btn--ghost" type="button">← Sebelumnya</button>
+          <button id="btnNextVideo" class="btn btn--ghost" type="button">Selanjutnya →</button>
+        </div>
+      </div>
+    </section>
   </body>
 </html>
