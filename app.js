@@ -29,7 +29,16 @@ let currentVideosState = [];
 let currentWatchIndex = -1;
 let lastTriggerButton = null;
 
+function canToggleMainSections() {
+  if (collectionsSectionEl && videosSectionEl) return true;
+  console.error(
+    "Elemen section utama tidak ditemukan. Pastikan id `collectionsSection` dan `videosSection` ada di HTML."
+  );
+  return false;
+}
+
 btnBackEl.addEventListener("click", () => {
+  if (!canToggleMainSections()) return;
   videosSectionEl.hidden = true;
   collectionsSectionEl.hidden = false;
   collectionTitleEl.textContent = "";
@@ -208,6 +217,7 @@ function renderCollections(collections) {
 function openCollection(collectionId) {
   const selected = collectionsState.find((item) => item.id === collectionId);
   if (!selected) return;
+  if (!canToggleMainSections()) return;
 
   collectionsSectionEl.hidden = true;
   videosSectionEl.hidden = false;
