@@ -525,9 +525,10 @@ body.modal-open {
   background: linear-gradient(180deg, #f5fffd 0%, #edffe8 100%);
 }
 
-.tiktok-iframe {
-  width: min(605px, 100%);
-  height: 740px;
+.youtube-iframe {
+  width: min(920px, 100%);
+  aspect-ratio: 16 / 9;
+  height: auto;
   border: 0;
   border-radius: 12px;
   margin: 0 auto;
@@ -705,9 +706,9 @@ body.modal-open {
     min-height: 360px;
   }
 
-  .tiktok-iframe {
-    height: 78dvh;
-    min-height: 520px;
+  .youtube-iframe {
+    width: 100%;
+    min-height: 220px;
   }
 
   .watch-modal__footer {

@@ -3,12 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Galeri Video TikTok</title>
+    <title>Galeri Video YouTube</title>
     <meta
       name="description"
-      content="Galeri video TikTok responsif berbasis JSON dengan embed player langsung."
+      content="Galeri video YouTube responsif berbasis JSON dengan embed player langsung."
     />
-    <link rel="preconnect" href="https://www.tiktok.com" />
+    <link rel="preconnect" href="https://www.youtube.com" />
+    <link rel="preconnect" href="https://www.youtube-nocookie.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -19,6 +20,9 @@
   </head>
   <body>
     <div id="root"></div>
-    <script src="app.js?v=20260407-1" type="module"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel" data-presets="react" src="app.js?v=20260408-1"></script>
   </body>
 </html>

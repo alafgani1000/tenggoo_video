@@ -1,12 +1,12 @@
-﻿# TikTok Embed Gallery (GitHub Pages)
+﻿# YouTube Embed Gallery (GitHub Pages)
 
-Aplikasi statis untuk menampilkan koleksi cover, lalu daftar video TikTok per koleksi. Embed video dilakukan per item menggunakan TikTok embed player langsung.
+Aplikasi statis untuk menampilkan koleksi cover, lalu daftar video YouTube per koleksi. Embed video dilakukan per item menggunakan YouTube embed player langsung.
 
 ## Struktur
 
 - `index.html` : layout utama
 - `styles.css` : styling responsif
-- `app.js` : load JSON, render cover koleksi, render video, dan render TikTok embed player langsung
+- `app.js` : logic React JS untuk load JSON, render cover koleksi, render video, dan render YouTube embed player
 - `data/videos.json` : sumber data galeri
 
 ## Format JSON (disarankan)
@@ -14,7 +14,7 @@ Aplikasi statis untuk menampilkan koleksi cover, lalu daftar video TikTok per ko
 ```json
 {
   "schemaVersion": 2,
-  "galleryTitle": "Koleksi Video TikTok Favorit",
+  "galleryTitle": "Koleksi Video YouTube Favorit",
   "galleryDescription": "Klik cover koleksi untuk membuka kumpulan video.",
   "collections": [
     {
@@ -26,7 +26,7 @@ Aplikasi statis untuk menampilkan koleksi cover, lalu daftar video TikTok per ko
         {
           "id": "vid1",
           "title": "Judul Video",
-          "tiktokUrl": "https://www.tiktok.com/@user/video/123...",
+          "youtubeUrl": "https://www.youtube.com/watch?v=VIDEO_ID",
           "thumbnail": "https://...",
           "description": "Deskripsi",
           "tags": ["tag1", "tag2"]
@@ -59,5 +59,5 @@ npx serve .
 
 ## Catatan
 
-- URL TikTok pada contoh adalah dummy; ganti dengan URL video yang valid.
-- Jika embed gagal (video privat/URL invalid), tombol "Buka di TikTok" tetap bisa dipakai.
+- URL YouTube pada contoh adalah dummy; ganti dengan URL video yang valid.
+- Jika embed gagal (video privat/URL invalid), tombol "Buka di YouTube" tetap bisa dipakai.

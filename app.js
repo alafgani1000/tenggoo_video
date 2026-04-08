@@ -1,13 +1,10 @@
-import React, { useEffect, useMemo, useState } from "https://esm.sh/react@18.3.1";
-import { createRoot } from "https://esm.sh/react-dom@18.3.1/client";
-import htm from "https://esm.sh/htm@3.1.1";
+﻿const { Fragment, useEffect, useMemo, useState } = React;
 
-const html = htm.bind(React.createElement);
 const DATA_PATH = "./data/videos.json";
 
 function isValidVideo(video) {
   if (!video || typeof video !== "object") return false;
-  if (typeof video.tiktokUrl !== "string" || !video.tiktokUrl.trim()) return false;
+  if (typeof video.youtubeUrl !== "string" || !video.youtubeUrl.trim()) return false;
   return true;
 }
 
@@ -56,11 +53,36 @@ function normalizeCollections(payload) {
   return [];
 }
 
-function extractTikTokVideoId(url) {
+function extractYouTubeVideoId(url) {
   const safeUrl = typeof url === "string" ? url.trim() : "";
-  const match = safeUrl.match(/\/video\/(\d+)/i);
-  if (!match) return "";
-  return match[1];
+  if (!safeUrl) return "";
+
+  try {
+    const parsed = new URL(safeUrl);
+    const host = parsed.hostname.replace(/^www\./i, "").toLowerCase();
+
+    if (host === "youtu.be") {
+      const id = parsed.pathname.split("/").filter(Boolean)[0] || "";
+      return /^[\w-]{11}$/.test(id) ? id : "";
+    }
+
+    if (host === "youtube.com" || host === "m.youtube.com") {
+      if (parsed.pathname === "/watch") {
+        const id = parsed.searchParams.get("v") || "";
+        return /^[\w-]{11}$/.test(id) ? id : "";
+      }
+
+      const parts = parsed.pathname.split("/").filter(Boolean);
+      const candidate =
+        parts[0] === "embed" || parts[0] === "shorts" ? parts[1] || "" : "";
+
+      return /^[\w-]{11}$/.test(candidate) ? candidate : "";
+    }
+  } catch (error) {
+    return "";
+  }
+
+  return "";
 }
 
 function parseUrlState() {
@@ -97,29 +119,29 @@ function CollectionCard({ collection, onOpen }) {
   const [coverError, setCoverError] = useState(false);
   const showCover = Boolean(collection.cover) && !coverError;
 
-  return html`
+  return (
     <article className="card card--collection">
-      <button className="collection-cover" type="button" onClick=${() => onOpen(collection.id)}>
-        ${showCover
-          ? html`<img
-              className="collection-cover__img"
-              src=${collection.cover}
-              alt=${`Cover koleksi ${collection.title}`}
-              loading="lazy"
-              data-active="true"
-              onError=${() => setCoverError(true)}
-            />`
-          : null}
-        <span className="collection-cover__placeholder" hidden=${showCover}>Tanpa cover</span>
+      <button className="collection-cover" type="button" onClick={() => onOpen(collection.id)}>
+        {showCover ? (
+          <img
+            className="collection-cover__img"
+            src={collection.cover}
+            alt={`Cover koleksi ${collection.title}`}
+            loading="lazy"
+            data-active="true"
+            onError={() => setCoverError(true)}
+          />
+        ) : null}
+        <span className="collection-cover__placeholder" hidden={showCover}>Tanpa cover</span>
         <span className="collection-cover__overlay">Lihat Video</span>
       </button>
       <div className="card__body">
-        <h3 className="card__title">${collection.title}</h3>
-        <p className="card__desc">${collection.description || "Tidak ada deskripsi koleksi."}</p>
-        <p className="card__meta">${collection.videos.length} video</p>
+        <h3 className="card__title">{collection.title}</h3>
+        <p className="card__desc">{collection.description || "Tidak ada deskripsi koleksi."}</p>
+        <p className="card__meta">{collection.videos.length} video</p>
       </div>
     </article>
-  `;
+  );
 }
 
 function VideoCard({ video, index, isActive, onWatch }) {
@@ -127,46 +149,48 @@ function VideoCard({ video, index, isActive, onWatch }) {
   const thumbnail = typeof video.thumbnail === "string" ? video.thumbnail.trim() : "";
   const showThumb = Boolean(thumbnail) && !thumbError;
 
-  return html`
-    <article className=${`card ${isActive ? "card--active" : ""}`.trim()}>
+  return (
+    <article className={`card ${isActive ? "card--active" : ""}`.trim()}>
       <div className="card__thumb-wrap">
-        ${showThumb
-          ? html`<img
-              className="card__thumb"
-              src=${thumbnail}
-              alt=${`Thumbnail video ${video.title || "TikTok"}`}
-              loading="lazy"
-              data-active="true"
-              onError=${() => setThumbError(true)}
-            />`
-          : null}
-        <span className="card__thumb-placeholder" hidden=${showThumb}>Tanpa thumbnail</span>
+        {showThumb ? (
+          <img
+            className="card__thumb"
+            src={thumbnail}
+            alt={`Thumbnail video ${video.title || "YouTube"}`}
+            loading="lazy"
+            data-active="true"
+            onError={() => setThumbError(true)}
+          />
+        ) : null}
+        <span className="card__thumb-placeholder" hidden={showThumb}>Tanpa thumbnail</span>
       </div>
 
       <div className="card__body">
-        <h3 className="card__title">${video.title || "Tanpa Judul"}</h3>
-        <p className="card__desc">${video.description || "Tanpa deskripsi."}</p>
+        <h3 className="card__title">{video.title || "Tanpa Judul"}</h3>
+        <p className="card__desc">{video.description || "Tanpa deskripsi."}</p>
         <ul className="tag-list" aria-label="Tag video">
-          ${(video.tags || []).map((tag, idx) => html`<li key=${`${video.tiktokUrl}-${idx}`}>${String(tag)}</li>`)}
+          {(video.tags || []).map((tag, idx) => (
+            <li key={`${video.id || video.youtubeUrl || index}-${idx}`}>{String(tag)}</li>
+          ))}
         </ul>
 
         <div className="card__actions">
-          <button className="btn btn--primary" type="button" onClick=${() => onWatch(index)}>
+          <button className="btn btn--primary" type="button" onClick={() => onWatch(index)}>
             Tonton di sini
           </button>
-          <a className="btn btn--ghost" href=${video.tiktokUrl} target="_blank" rel="noopener noreferrer">
-            Buka di TikTok
+          <a className="btn btn--ghost" href={video.youtubeUrl} target="_blank" rel="noopener noreferrer">
+            Buka di YouTube
           </a>
         </div>
       </div>
     </article>
-  `;
+  );
 }
 
 function App() {
   const [galleryTitle, setGalleryTitle] = useState("Memuat koleksi...");
   const [galleryDescription, setGalleryDescription] = useState(
-    "Pilih cover koleksi untuk melihat kumpulan video TikTok."
+    "Pilih cover koleksi untuk melihat kumpulan video YouTube."
   );
   const [collections, setCollections] = useState([]);
   const [selectedCollectionId, setSelectedCollectionId] = useState("");
@@ -195,9 +219,9 @@ function App() {
 
         if (cancelled) return;
 
-        setGalleryTitle(payload.galleryTitle || "Galeri Video TikTok");
+        setGalleryTitle(payload.galleryTitle || "Galeri Video YouTube");
         setGalleryDescription(
-          payload.galleryDescription || "Pilih cover koleksi untuk melihat kumpulan video TikTok."
+          payload.galleryDescription || "Pilih cover koleksi untuk melihat kumpulan video YouTube."
         );
         setCollections(nextCollections);
 
@@ -316,143 +340,136 @@ function App() {
     setWatchIndex(index);
   }
 
-  const videoId = currentVideo ? extractTikTokVideoId(currentVideo.tiktokUrl) : "";
+  const videoId = currentVideo ? extractYouTubeVideoId(currentVideo.youtubeUrl) : "";
 
-  return html`
-    <${React.Fragment}>
+  return (
+    <Fragment>
       <header className="hero">
         <div className="hero__content">
-          <p className="hero__eyebrow">TikTok Embed Gallery</p>
-          <h1>${galleryTitle}</h1>
-          <p>${galleryDescription}</p>
+          <p className="hero__eyebrow">YouTube Embed Gallery</p>
+          <h1>{galleryTitle}</h1>
+          <p>{galleryDescription}</p>
         </div>
       </header>
 
       <main className="container" id="app" aria-live="polite">
         <section className="topbar">
-          <p className="breadcrumb">${breadcrumb}</p>
-          <section className="status" role="status">${status}</section>
+          <p className="breadcrumb">{breadcrumb}</p>
+          <section className="status" role="status">{status}</section>
         </section>
 
-        ${!selectedCollection
-          ? html`
-              <section>
-                <h2 className="section-title">Koleksi</h2>
-                <section className="collection-grid" aria-label="Daftar koleksi">
-                  ${collections.map(
-                    (collection) =>
-                      html`<${CollectionCard}
-                        key=${collection.id}
-                        collection=${collection}
-                        onOpen=${openCollection}
-                      />`
-                  )}
-                </section>
-              </section>
-            `
-          : html`
-              <section>
-                <div className="videos-header">
-                  <button className="btn btn--ghost" type="button" onClick=${backToCollections}>
-                    Kembali ke Koleksi
-                  </button>
-                  <div>
-                    <h2 className="section-title">${selectedCollection.title}</h2>
-                    <p className="collection-meta">
-                      ${selectedCollection.videos.length} video dalam koleksi ini
-                    </p>
-                  </div>
-                </div>
-                <section className="video-grid" aria-label="Daftar video">
-                  ${currentVideos.map(
-                    (video, index) =>
-                      html`<${VideoCard}
-                        key=${`${video.tiktokUrl}-${index}`}
-                        video=${video}
-                        index=${index}
-                        isActive=${watchIndex === index}
-                        onWatch=${openWatchByIndex}
-                      />`
-                  )}
-                </section>
-              </section>
-            `}
+        {!selectedCollection ? (
+          <section>
+            <h2 className="section-title">Koleksi</h2>
+            <section className="collection-grid" aria-label="Daftar koleksi">
+              {collections.map((collection) => (
+                <CollectionCard key={collection.id} collection={collection} onOpen={openCollection} />
+              ))}
+            </section>
+          </section>
+        ) : (
+          <section>
+            <div className="videos-header">
+              <button className="btn btn--ghost" type="button" onClick={backToCollections}>
+                Kembali ke Koleksi
+              </button>
+              <div>
+                <h2 className="section-title">{selectedCollection.title}</h2>
+                <p className="collection-meta">
+                  {selectedCollection.videos.length} video dalam koleksi ini
+                </p>
+              </div>
+            </div>
+            <section className="video-grid" aria-label="Daftar video">
+              {currentVideos.map((video, index) => (
+                <VideoCard
+                  key={`${video.id || video.youtubeUrl || "video"}-${index}`}
+                  video={video}
+                  index={index}
+                  isActive={watchIndex === index}
+                  onWatch={openWatchByIndex}
+                />
+              ))}
+            </section>
+          </section>
+        )}
       </main>
 
-      ${currentVideo
-        ? html`
-            <section className="watch-modal">
-              <div className="watch-modal__backdrop" onClick=${() => setWatchIndex(-1)}></div>
-              <div
-                className="watch-modal__dialog"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="watchTitle"
-              >
-                <div className="watch-modal__header">
-                  <div>
-                    <p className="watch-modal__eyebrow">Sedang Ditonton</p>
-                    <h3 id="watchTitle" className="watch-modal__title">
-                      ${currentVideo.title || "Tanpa Judul"}
-                    </h3>
-                    <p className="watch-modal__hint">
-                      Video ${watchIndex + 1} dari ${currentVideos.length}
-                    </p>
-                  </div>
-                  <button
-                    className="btn btn--ghost watch-modal__close"
-                    type="button"
-                    aria-label="Tutup modal"
-                    onClick=${() => setWatchIndex(-1)}
-                  >
-                    Tutup X
-                  </button>
-                </div>
-                <p className="watch-modal__shortcut">
-                  Shortcut: tombol Esc untuk tutup, panah kiri dan panah kanan untuk pindah video.
+      {currentVideo ? (
+        <section className="watch-modal">
+          <div className="watch-modal__backdrop" onClick={() => setWatchIndex(-1)}></div>
+          <div
+            className="watch-modal__dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="watchTitle"
+          >
+            <div className="watch-modal__header">
+              <div>
+                <p className="watch-modal__eyebrow">Sedang Ditonton</p>
+                <h3 id="watchTitle" className="watch-modal__title">
+                  {currentVideo.title || "Tanpa Judul"}
+                </h3>
+                <p className="watch-modal__hint">
+                  Video {watchIndex + 1} dari {currentVideos.length}
                 </p>
-                <div className="watch-modal__status">
-                  ${videoId ? "Video siap ditonton." : "Gagal memuat embed: URL TikTok tidak valid."}
-                </div>
-                <div className="watch-modal__embed">
-                  ${videoId
-                    ? html`<iframe
-                        src=${`https://www.tiktok.com/embed/v2/${videoId}?lang=en-US`}
-                        title=${`TikTok Video ${videoId}`}
-                        className="tiktok-iframe"
-                        loading="lazy"
-                        allowFullScreen
-                        referrerPolicy="strict-origin-when-cross-origin"
-                      ></iframe>`
-                    : null}
-                </div>
-                <div className="watch-modal__footer">
-                  <button
-                    className="btn btn--ghost"
-                    type="button"
-                    disabled=${watchIndex <= 0}
-                    onClick=${() => setWatchIndex((prev) => (prev > 0 ? prev - 1 : prev))}
-                  >
-                    Sebelumnya
-                  </button>
-                  <button
-                    className="btn btn--ghost"
-                    type="button"
-                    disabled=${watchIndex >= currentVideos.length - 1}
-                    onClick=${() =>
-                      setWatchIndex((prev) =>
-                        prev < currentVideos.length - 1 ? prev + 1 : prev
-                      )}
-                  >
-                    Selanjutnya
-                  </button>
-                </div>
               </div>
-            </section>
-          `
-        : null}
-    </${React.Fragment}>
-  `;
+              <button
+                className="btn btn--ghost watch-modal__close"
+                type="button"
+                aria-label="Tutup modal"
+                onClick={() => setWatchIndex(-1)}
+              >
+                Tutup X
+              </button>
+            </div>
+            <p className="watch-modal__shortcut">
+              Shortcut: tombol Esc untuk tutup, panah kiri dan panah kanan untuk pindah video.
+            </p>
+            <div className="watch-modal__status">
+              {videoId ? "Video siap ditonton." : "Gagal memuat embed: URL YouTube tidak valid."}
+            </div>
+            <div className="watch-modal__embed">
+              {videoId ? (
+                <iframe
+                  src={`https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&playsinline=1`}
+                  title={`YouTube Video ${videoId}`}
+                  className="youtube-iframe"
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  referrerPolicy="strict-origin-when-cross-origin"
+                ></iframe>
+              ) : null}
+            </div>
+            <div className="watch-modal__footer">
+              <button
+                className="btn btn--ghost"
+                type="button"
+                disabled={watchIndex <= 0}
+                onClick={() => setWatchIndex((prev) => (prev > 0 ? prev - 1 : prev))}
+              >
+                Sebelumnya
+              </button>
+              <button
+                className="btn btn--ghost"
+                type="button"
+                disabled={watchIndex >= currentVideos.length - 1}
+                onClick={() =>
+                  setWatchIndex((prev) =>
+                    prev < currentVideos.length - 1 ? prev + 1 : prev
+                  )
+                }
+              >
+                Selanjutnya
+              </button>
+            </div>
+          </div>
+        </section>
+      ) : null}
+    </Fragment>
+  );
 }
 
-createRoot(document.getElementById("root")).render(html`<${App} />`);
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
