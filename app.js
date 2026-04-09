@@ -132,7 +132,7 @@ function CollectionCard({ collection, onOpen }) {
             onError={() => setCoverError(true)}
           />
         ) : null}
-        <span className="collection-cover__placeholder" hidden={showCover}>Tanpa cover</span>
+        <span className="collection-cover__placeholder" hidden={showCover}>Belum ada gambar</span>
         <span className="collection-cover__overlay">Lihat Video</span>
       </button>
       <div className="card__body">
@@ -176,7 +176,7 @@ function VideoCard({ video, index, isActive, onWatch }) {
 
         <div className="card__actions">
           <button className="btn btn--primary" type="button" onClick={() => onWatch(index)}>
-            Tonton di sini
+            Putar video
           </button>
           <a className="btn btn--ghost" href={video.youtubeUrl} target="_blank" rel="noopener noreferrer">
             Buka di YouTube
@@ -346,7 +346,7 @@ function App() {
     <Fragment>
       <header className="hero">
         <div className="hero__content">
-          <p className="hero__eyebrow">YouTube Embed Gallery</p>
+          <p className="hero__eyebrow">Ruang Belajar Video</p>
           <h1>{galleryTitle}</h1>
           <p>{galleryDescription}</p>
         </div>
@@ -371,7 +371,7 @@ function App() {
           <section>
             <div className="videos-header">
               <button className="btn btn--ghost" type="button" onClick={backToCollections}>
-                Kembali ke Koleksi
+                Kembali ke daftar
               </button>
               <div>
                 <h2 className="section-title">{selectedCollection.title}</h2>
@@ -406,7 +406,7 @@ function App() {
           >
             <div className="watch-modal__header">
               <div>
-                <p className="watch-modal__eyebrow">Sedang Ditonton</p>
+                <p className="watch-modal__eyebrow">Sedang diputar</p>
                 <h3 id="watchTitle" className="watch-modal__title">
                   {currentVideo.title || "Tanpa Judul"}
                 </h3>
@@ -424,7 +424,7 @@ function App() {
               </button>
             </div>
             <p className="watch-modal__shortcut">
-              Shortcut: tombol Esc untuk tutup, panah kiri dan panah kanan untuk pindah video.
+              Tombol cepat: Esc untuk tutup, panah kiri atau kanan untuk pindah video.
             </p>
             <div className="watch-modal__status">
               {videoId ? "Video siap ditonton." : "Gagal memuat embed: URL YouTube tidak valid."}
