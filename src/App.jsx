@@ -1,8 +1,14 @@
-import { Fragment, useEffect, useMemo, useState } from 'react';
-import Hero from './components/Hero';
-import Gallery from './components/Gallery';
-import VideoModal from './components/VideoModal';
-import { isValidVideo, normalizeCollections, extractYouTubeVideoId, parseUrlState, writeUrlState } from './utils/videoUtils';
+import { Fragment, useEffect, useMemo, useState } from "react";
+import Hero from "./components/Hero";
+import Gallery from "./components/Gallery";
+import VideoModal from "./components/VideoModal";
+import {
+  isValidVideo,
+  normalizeCollections,
+  extractYouTubeVideoId,
+  parseUrlState,
+  writeUrlState,
+} from "./utils/videoUtils";
 
 const DATA_PATH = "./data/videos.json";
 
@@ -37,11 +43,14 @@ function App() {
         setCollections(normalizedCollections);
         setGalleryTitle(payload.galleryTitle || "Koleksi Video YouTube");
         setGalleryDescription(
-          payload.galleryDescription || "Jelajahi koleksi video kami"
+          payload.galleryDescription || "Jelajahi koleksi video kami",
         );
 
         const { collectionId } = parseUrlState();
-        if (collectionId && !normalizedCollections.find((c) => c.id === collectionId)) {
+        if (
+          collectionId &&
+          !normalizedCollections.find((c) => c.id === collectionId)
+        ) {
           setSelectedCollectionId(normalizedCollections[0]?.id || "");
         }
 
@@ -57,7 +66,7 @@ function App() {
 
   const selectedCollection = useMemo(
     () => collections.find((c) => c.id === selectedCollectionId),
-    [collections, selectedCollectionId]
+    [collections, selectedCollectionId],
   );
 
   const selectedVideo = useMemo(
@@ -65,7 +74,7 @@ function App() {
       selectedCollection && selectedVideoIndex >= 0
         ? selectedCollection.videos[selectedVideoIndex]
         : null,
-    [selectedCollection, selectedVideoIndex]
+    [selectedCollection, selectedVideoIndex],
   );
 
   const handleCollectionClick = (collectionId) => {
@@ -93,7 +102,10 @@ function App() {
   };
 
   const handleNext = () => {
-    if (selectedCollection && selectedVideoIndex < selectedCollection.videos.length - 1) {
+    if (
+      selectedCollection &&
+      selectedVideoIndex < selectedCollection.videos.length - 1
+    ) {
       const newIndex = selectedVideoIndex + 1;
       setSelectedVideoIndex(newIndex);
       writeUrlState(selectedCollectionId, newIndex);

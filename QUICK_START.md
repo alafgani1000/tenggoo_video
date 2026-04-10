@@ -3,36 +3,41 @@
 ## Langkah Pertama
 
 ### 1️⃣ Start Development Server
+
 ```bash
 npm run dev
 ```
+
 Buka browser di: **http://localhost:5173**
 
 ### 2️⃣ Edit & Develop
+
 - Component React ada di `src/components/`
 - Styles Tailwind CSS di `src/` (otomatis)
 - Main app logic di `src/App.jsx`
 
 ### 3️⃣ Build untuk Production
+
 ```bash
 npm run build
 ```
+
 Output ada di folder `dist/` siap di-deploy
 
 ---
 
 ## 📋 File-file Penting
 
-| File | Fungsi |
-|------|--------|
-| `src/App.jsx` | Root component, main logic |
-| `src/main.jsx` | Entry point React |
-| `src/index.css` | Tailwind imports & global styles |
-| `src/components/` | Reusable React components |
-| `data/videos.json` | Data koleksi video |
-| `tailwind.config.js` | Tailwind customization |
-| `vite.config.js` | Vite configuration |
-| `package.json` | Dependencies & scripts |
+| File                 | Fungsi                           |
+| -------------------- | -------------------------------- |
+| `src/App.jsx`        | Root component, main logic       |
+| `src/main.jsx`       | Entry point React                |
+| `src/index.css`      | Tailwind imports & global styles |
+| `src/components/`    | Reusable React components        |
+| `data/videos.json`   | Data koleksi video               |
+| `tailwind.config.js` | Tailwind customization           |
+| `vite.config.js`     | Vite configuration               |
+| `package.json`       | Dependencies & scripts           |
 
 ---
 
@@ -47,6 +52,7 @@ Tailwind CSS sudah terintegrasi. Gunakan class utility langsung di JSX:
 ```
 
 Custom colors sudah didefinisikan di `tailwind.config.js`:
+
 - `bg-primary` → #2f80ed
 - `text-main` → #1f2a44
 - `text-muted` → #5f6d85
@@ -70,6 +76,7 @@ App (main)
 ## 📊 Data JSON Format
 
 File `data/videos.json`:
+
 ```json
 {
   "galleryTitle": "Judul",

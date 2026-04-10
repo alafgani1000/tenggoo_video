@@ -3,6 +3,7 @@
 ## Apa yang Berubah?
 
 ### ❌ Before (CDN-based React)
+
 ```html
 <!-- Old index.html -->
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -15,12 +16,14 @@
 ```
 
 ### ✅ After (Module-based Vite)
+
 ```html
 <!-- New index.html -->
 <script type="module" src="/src/main.jsx"></script>
 ```
 
 **Keuntungan:**
+
 - ⚡ Development server lebih cepat (Vite)
 - 📦 Bundle size lebih kecil (ES modules, tree-shaking)
 - 🔥 Hot Module Replacement (HMR) built-in
@@ -31,14 +34,14 @@
 
 ## File Mapping
 
-| Old File | New Location | Notes |
-|----------|-------------|-------|
-| `app.js` | `src/App.jsx` | Main component, masih sama logika |
-| `styles.css` | `src/index.css` | Sekarang gunakan Tailwind classes |
-| `index.html` | `index.html` | Updated untuk Vite |
-| (baru) | `src/main.jsx` | Entry point React |
-| (baru) | `src/components/` | Component-based structure |
-| (baru) | `src/utils/` | Utility functions |
+| Old File     | New Location      | Notes                             |
+| ------------ | ----------------- | --------------------------------- |
+| `app.js`     | `src/App.jsx`     | Main component, masih sama logika |
+| `styles.css` | `src/index.css`   | Sekarang gunakan Tailwind classes |
+| `index.html` | `index.html`      | Updated untuk Vite                |
+| (baru)       | `src/main.jsx`    | Entry point React                 |
+| (baru)       | `src/components/` | Component-based structure         |
+| (baru)       | `src/utils/`      | Utility functions                 |
 
 ---
 
@@ -77,8 +80,10 @@ ROOT/
 ## Logic Perubahan
 
 ### App Structure
+
 **OLD:** Single file `app.js` dengan semuanya
 **NEW:** Modular components:
+
 - `App.jsx` - State management & logic
 - `Hero.jsx` - Hero section
 - `Gallery.jsx` - Main view
@@ -88,7 +93,9 @@ ROOT/
 - `videoUtils.js` - Utility functions
 
 ### Styling
+
 **OLD:**
+
 ```css
 /* CSS custom properties */
 :root {
@@ -102,11 +109,10 @@ ROOT/
 ```
 
 **NEW:**
+
 ```jsx
 // Tailwind classes
-<button className="bg-primary text-white rounded-lg">
-  Button
-</button>
+<button className="bg-primary text-white rounded-lg">Button</button>
 ```
 
 ---
@@ -114,12 +120,14 @@ ROOT/
 ## Development Workflow
 
 ### OLD
+
 ```bash
 # Just open index.html in browser
 # No build step, direct DOM manipulation
 ```
 
 ### NEW
+
 ```bash
 # Development
 npm run dev            # Start Vite dev server
@@ -133,12 +141,12 @@ npm run preview        # Preview build
 
 ## Performance Improvements
 
-| Metric | Old | New | Improvement |
-|--------|-----|-----|-------------|
-| Dev Server | Babel live compile | Vite ESM | ⚡ 50-100x faster |
-| HMR Time | N/A | < 100ms | ✅ Instant reload |
-| Production Bundle | ~150KB | ~100KB | 📉 33% smaller |
-| Build Time | N/A | < 1sec | ⏱️ Very fast |
+| Metric            | Old                | New      | Improvement       |
+| ----------------- | ------------------ | -------- | ----------------- |
+| Dev Server        | Babel live compile | Vite ESM | ⚡ 50-100x faster |
+| HMR Time          | N/A                | < 100ms  | ✅ Instant reload |
+| Production Bundle | ~150KB             | ~100KB   | 📉 33% smaller    |
+| Build Time        | N/A                | < 1sec   | ⏱️ Very fast      |
 
 ---
 
@@ -185,6 +193,7 @@ npm run preview        # Preview build
 ## Rollback (jika diperlukan)
 
 Old files masih ada:
+
 - `app.js` (backup)
 - `styles.css` (backup)
 
@@ -195,6 +204,7 @@ Bisa restore sebelumnya jika ada issue.
 ## Support
 
 Butuh bantuan? Cek:
+
 - `QUICK_START.md` - Getting started guide
 - `README_NEW.md` - Detailed documentation
 - `vite.config.js` - Vite configuration

@@ -1,5 +1,5 @@
-import CollectionGrid from './CollectionGrid';
-import VideoGrid from './VideoGrid';
+import CollectionGrid from "./CollectionGrid";
+import VideoGrid from "./VideoGrid";
 
 function Gallery({
   collections,
@@ -9,10 +9,11 @@ function Gallery({
   onVideoClick,
 }) {
   const selectedCollection = collections.find(
-    (c) => c.id === selectedCollectionId
+    (c) => c.id === selectedCollectionId,
   );
 
-  const hasCollection = selectedCollection && selectedCollection.videos.length > 0;
+  const hasCollection =
+    selectedCollection && selectedCollection.videos.length > 0;
 
   return (
     <main className="max-w-4xl mx-auto px-4.5 pb-9">
@@ -25,7 +26,8 @@ function Gallery({
         <>
           <nav className="flex flex-wrap gap-2.5 items-center justify-between mb-3.5">
             <p className="m-0 text-sm font-semibold text-text-main">
-              Kembali ke <button
+              Kembali ke{" "}
+              <button
                 onClick={() => onCollectionClick("")}
                 className="text-primary hover:text-primary-strong underline cursor-pointer bg-none border-none p-0"
               >
@@ -37,7 +39,9 @@ function Gallery({
             {selectedCollection.title}
           </h2>
           {selectedCollection.description && (
-            <p className="text-text-muted mb-6">{selectedCollection.description}</p>
+            <p className="text-text-muted mb-6">
+              {selectedCollection.description}
+            </p>
           )}
           <VideoGrid
             videos={selectedCollection.videos}

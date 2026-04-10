@@ -1,6 +1,7 @@
 export function isValidVideo(video) {
   if (!video || typeof video !== "object") return false;
-  if (typeof video.youtubeUrl !== "string" || !video.youtubeUrl.trim()) return false;
+  if (typeof video.youtubeUrl !== "string" || !video.youtubeUrl.trim())
+    return false;
   return true;
 }
 
@@ -89,7 +90,8 @@ export function parseUrlState() {
 
   return {
     collectionId,
-    watchIndex: Number.isInteger(watchIndex) && watchIndex >= 0 ? watchIndex : -1,
+    watchIndex:
+      Number.isInteger(watchIndex) && watchIndex >= 0 ? watchIndex : -1,
   };
 }
 
@@ -108,8 +110,8 @@ export function writeUrlState(collectionId, watchIndex) {
     watchIndex >= 0 && collectionId
       ? `?${params.toString()}`
       : collectionId
-      ? `?collection=${encodeURIComponent(collectionId)}`
-      : window.location.pathname;
+        ? `?collection=${encodeURIComponent(collectionId)}`
+        : window.location.pathname;
 
   window.history.replaceState(null, "", newUrl);
 }

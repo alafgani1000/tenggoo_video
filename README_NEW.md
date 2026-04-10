@@ -38,26 +38,33 @@ tenggoo_learn_app/
 ## 🛠️ Setup & Development
 
 ### Prerequisites
+
 - Node.js 16+ dan npm/pnpm/yarn
 
 ### Install Dependencies
+
 ```bash
 npm install
 ```
 
 ### Development Server
+
 ```bash
 npm run dev
 ```
+
 Server akan berjalan di `http://localhost:5173`
 
 ### Build for Production
+
 ```bash
 npm run build
 ```
+
 Output akan ada di folder `dist/`
 
 ### Preview Production Build
+
 ```bash
 npm run preview
 ```
@@ -105,6 +112,7 @@ File `data/videos.json` harus mengikuti format:
 ## 🎨 Customization
 
 ### Colors
+
 Edit `tailwind.config.js` untuk mengubah palet warna:
 
 ```js
@@ -116,6 +124,7 @@ colors: {
 ```
 
 ### Fonts
+
 Font menggunakan Baloo 2 dan Nunito dari Google Fonts. Edit di `src/index.css`
 
 ## 🚢 Deployment
@@ -126,7 +135,9 @@ Font menggunakan Baloo 2 dan Nunito dari Google Fonts. Edit di `src/index.css`
 2. Deploy folder `dist/` ke hosting platform
 
 ### CNAME (GitHub Pages)
+
 Jika menggunakan GitHub Pages, buat file `CNAME` di folder `public/`:
+
 ```
 yourdomain.com
 ```
@@ -134,20 +145,24 @@ yourdomain.com
 ## 📦 Build Size
 
 Vite menghasilkan bundle yang optimal:
+
 - Development bundle: ~500KB (dengan source maps)
 - Production bundle: ~100KB+ gzipped (dengan tree-shaking)
 
 ## 🔧 Troubleshooting
 
 ### Port sudah digunakan
+
 Ubah port di `vite.config.js`:
+
 ```js
 server: {
-  port: 3000  // Ganti port
+  port: 3000; // Ganti port
 }
 ```
 
 ### Tailwind styles tidak muncul
+
 ```bash
 # Clear cache dan rebuild
 rm -rf node_modules .vite dist

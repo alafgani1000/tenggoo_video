@@ -1,11 +1,12 @@
-import { extractYouTubeVideoId } from '../utils/videoUtils';
+import { extractYouTubeVideoId } from "../utils/videoUtils";
 
 function VideoGrid({ videos, selectedVideoIndex, onVideoClick }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {videos.map((video, index) => {
         const videoId = extractYouTubeVideoId(video.youtubeUrl);
-        const thumbnail = video.thumbnail || 
+        const thumbnail =
+          video.thumbnail ||
           `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 
         return (
@@ -14,8 +15,8 @@ function VideoGrid({ videos, selectedVideoIndex, onVideoClick }) {
             onClick={() => onVideoClick(index)}
             className={`group text-left rounded-lg overflow-hidden border transition-all cursor-pointer ${
               selectedVideoIndex === index
-                ? 'border-primary shadow-md ring-2 ring-primary ring-opacity-50'
-                : 'border-line hover:border-primary shadow-sm hover:shadow-md'
+                ? "border-primary shadow-md ring-2 ring-primary ring-opacity-50"
+                : "border-line hover:border-primary shadow-sm hover:shadow-md"
             }`}
           >
             <div className="relative overflow-hidden bg-gray-100 aspect-video">

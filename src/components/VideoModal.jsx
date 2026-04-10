@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { extractYouTubeVideoId } from '../utils/videoUtils';
+import { useEffect } from "react";
+import { extractYouTubeVideoId } from "../utils/videoUtils";
 
 function VideoModal({
   video,
@@ -14,17 +14,17 @@ function VideoModal({
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowLeft') onPrev();
-      if (e.key === 'ArrowRight') onNext();
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft") onPrev();
+      if (e.key === "ArrowRight") onNext();
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    document.body.classList.add('modal-open');
+    document.addEventListener("keydown", handleKeyDown);
+    document.body.classList.add("modal-open");
 
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.body.classList.remove('modal-open');
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.classList.remove("modal-open");
     };
   }, [onClose, onPrev, onNext]);
 
@@ -48,7 +48,10 @@ function VideoModal({
   const canGoNext = videoIndex < totalVideos - 1;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={onClose}>
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+      onClick={onClose}
+    >
       <div
         className="bg-white rounded-xl shadow-lg overflow-auto max-w-4xl w-full max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
@@ -68,8 +71,18 @@ function VideoModal({
             className="ml-4 text-text-muted hover:text-text-main transition"
             aria-label="Tutup"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
@@ -85,7 +98,7 @@ function VideoModal({
               title={video.title}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
-              style={{ border: 'none' }}
+              style={{ border: "none" }}
             />
           </div>
 
@@ -93,7 +106,9 @@ function VideoModal({
           {video.description && (
             <div className="mb-6">
               <h3 className="font-semibold text-text-main mb-2">Deskripsi</h3>
-              <p className="text-text-muted leading-relaxed">{video.description}</p>
+              <p className="text-text-muted leading-relaxed">
+                {video.description}
+              </p>
             </div>
           )}
 
@@ -127,8 +142,8 @@ function VideoModal({
               disabled={!canGoPrev}
               className={`flex-1 py-2 px-4 rounded-lg font-semibold transition ${
                 canGoPrev
-                  ? 'bg-primary text-white hover:bg-primary-strong'
-                  : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  ? "bg-primary text-white hover:bg-primary-strong"
+                  : "bg-gray-100 text-gray-400 cursor-not-allowed"
               }`}
             >
               ← Sebelumnya
@@ -138,8 +153,8 @@ function VideoModal({
               disabled={!canGoNext}
               className={`flex-1 py-2 px-4 rounded-lg font-semibold transition ${
                 canGoNext
-                  ? 'bg-primary text-white hover:bg-primary-strong'
-                  : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  ? "bg-primary text-white hover:bg-primary-strong"
+                  : "bg-gray-100 text-gray-400 cursor-not-allowed"
               }`}
             >
               Berikutnya →
