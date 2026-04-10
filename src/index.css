@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap');
+
+body {
+  @apply font-nunito text-text-main;
+  background:
+    radial-gradient(circle at 8% 0%, #ffffff 0%, transparent 24%),
+    radial-gradient(circle at 92% 100%, #e7f1ff 0%, transparent 28%),
+    rgb(243, 248, 255);
+  min-height: 100vh;
+}
+
+body.modal-open {
+  @apply overflow-hidden;
+}
